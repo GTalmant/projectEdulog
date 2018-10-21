@@ -1,26 +1,40 @@
 package com.edulog.simple.project.dao.collections;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 public class User {
 	
 	@Id
+	@NonNull
 	private String id;
 
+	@NonNull
 	private String firstName;
+	
+	@NonNull
 	private String lastName;
 	
-	private Map<String, Task> tasks;
+	@Nullable
+	private List<Task> tasks;
 	
-	//this constructor was present in the mongoDB tutorial that I saw, may be not mandatory
-	public User() {}
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 	
-	public User(String firstName, String lastName, Map<String, Task> task) {
+	public User(String id, String firstName, String lastName) {
+		this(id, firstName, lastName, new ArrayList<>());
+	}
+	
+	public User(String id, String firstName, String lastName, List<Task> tasks) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.tasks = task;
+		this.tasks = tasks;
 	}
 
 	public String getFirstName() {
@@ -43,7 +57,7 @@ public class User {
 		return id;
 	}
 
-	public Map<String, Task> getTasks() {
+	public List<Task> getTasks() {
 		return tasks;
 	}
 	
@@ -51,7 +65,7 @@ public class User {
 		this.id = id;
 	}
 	
-	public void setTasks(Map<String, Task> tasks) {
+	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
 	}
 	
