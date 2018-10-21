@@ -1,11 +1,15 @@
 package com.edulog.simple.project.dao.collections;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.lang.NonNull;
 
 public class Task {
 	
 	@Id
+	@NonNull
 	private String id;
+	
+	@NonNull
 	private String description;
 
 	public Task(String id, String description) {

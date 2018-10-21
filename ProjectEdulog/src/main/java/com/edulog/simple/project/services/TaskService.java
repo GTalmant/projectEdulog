@@ -33,9 +33,8 @@ public class TaskService {
 	}
 	
 	public Task delete(Task task) {
-		List<User> users = userService.findByTasks(task);
-		//here remove task from user
-		// repo.delete(task);
+		repo.delete(task);
+		userService.removeTaskForAllUsers(task);
 		return task;
 	}
 

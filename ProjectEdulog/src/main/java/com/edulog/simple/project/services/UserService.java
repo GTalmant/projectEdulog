@@ -3,6 +3,9 @@ package com.edulog.simple.project.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.edulog.simple.project.dao.collections.Task;
@@ -21,6 +24,9 @@ public class UserService {
 	@Autowired
 	private TaskRepository taskRepo;
 	
+	@Autowired
+	private MongoTemplate mongoTemplate;
+	
 	public List<User> getAll() {
 		return repo.findAll();
 	}
@@ -31,7 +37,7 @@ public class UserService {
 	
 	public User newUser(User user) {
 		user.getTasks().forEach(t -> taskRepo.save(t));
-		return repo.insert(user);
+		return repo.save(user);
 	}
 	
 	public User delete(User user) {
@@ -43,6 +49,18 @@ public class UserService {
 		return repo.findByTasks(task);
 	}
 	
-	
+	/**
+	 * 
+	 * remove the current task on every user</br>
+	 * equivalent to : db.user.update({},{$pull: {tasks: _id: $1}}}, { multi: true}) </br>
+	 * but I have not found the way to use directly this request
+	 * @param task
+	 */
+	public void removeTaskForAllUsers(Task task) {
+		Query query = new Query();
+		Update update = new Update();
+		update.pull("tasks", task);
+		mongoTemplate.updateMulti(query, update, User.class);
+	}
 
 }
