@@ -12,19 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edulog.simple.project.dao.collections.Task;
-import com.edulog.simple.project.dao.collections.User;
 import com.edulog.simple.project.services.TaskService;
-import com.edulog.simple.project.services.UserService;
 
 @RestController
 public class TaskController {
 	
 	@Autowired
 	private TaskService service;
-	
-	@Autowired
-	private UserService userService;
-
 	
 	@GetMapping("/task")
 	public List<Task> getAll() {
@@ -56,9 +50,7 @@ public class TaskController {
 	@DeleteMapping("/task/{id}")
 	public Task deleteById(@PathVariable(value="id") String id) {
 		Task task = service.getTask(id);
-		List<User> users = userService.findByTasks(task);
-		//here remove task from user
-		return task;
+		return service.delete(task);
 	}
 
 }
