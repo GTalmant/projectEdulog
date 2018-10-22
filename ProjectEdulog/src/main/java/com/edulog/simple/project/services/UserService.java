@@ -85,7 +85,7 @@ public class UserService {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(userId));
 		Update update = new Update();
-		update.pull("tasks", Query.query(Criteria.where("tasks.is").is(taskId)));
+		update.pull("tasks", Query.query(Criteria.where("id").is(taskId)));
 		mongoTemplate.updateMulti(query, update, User.class);
 		return getUser(userId);
 	}

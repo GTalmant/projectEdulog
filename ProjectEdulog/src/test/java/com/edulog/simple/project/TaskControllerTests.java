@@ -92,7 +92,7 @@ public class TaskControllerTests {
 	
 	@Test
 	public void testPutToLong() throws Exception {
-		Task task = new Task("toLong", "Unfortunatly, this is a to long description to be accepted by the service, it is to bad, but it is the law");
+		Task task = new Task("toLong", "Unfortunatly, this is a too long description to be accepted by the service, it is too bad, but it is the law");
 		mockMvc.perform(put("/task/toLong")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(task.toJson()))

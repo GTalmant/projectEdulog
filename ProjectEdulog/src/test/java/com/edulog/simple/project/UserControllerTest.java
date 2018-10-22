@@ -95,7 +95,7 @@ private MockMvc mockMvc;
 	
 	@Test
 	public void testPutToLongLastName() throws Exception {
-		User user = new User("toLong", "goodFirstName", "Really To Long Name For This Constraint");
+		User user = new User("toLong", "goodFirstName", "Really Too Long Name For This Constraint");
 		mockMvc.perform(put("/user/toLong")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(user.toJson()))
@@ -145,7 +145,7 @@ private MockMvc mockMvc;
 	
 	@Test
 	public void testPostToLongLastName() throws Exception {
-		User user = new User("toLong", "goodFirstName", "Really To Long Name For This Constraint");
+		User user = new User("toLong", "goodFirstName", "Really Too Long Name For This Constraint");
 		mockMvc.perform(post("/user")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(user.toJson()))
