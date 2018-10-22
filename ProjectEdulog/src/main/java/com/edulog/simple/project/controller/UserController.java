@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edulog.simple.project.dao.collections.Task;
 import com.edulog.simple.project.dao.collections.User;
 import com.edulog.simple.project.services.UserService;
 
@@ -51,6 +52,23 @@ public class UserController {
 	public User deleteById(@PathVariable(value="id") String id) {
 		User user = service.getUser(id);
 		return service.delete(user);
+	}
+	
+	@PostMapping("/user/{id}/tasks")
+	public User addTaskToUser(@PathVariable(value="id") String id, @RequestBody Task task) {
+		
+		return service.addTaskToUser(task, id);
+	}
+	
+	@DeleteMapping("/user/{userId}/tasks/{taskId}")
+	public User deleteTaskForUser(@PathVariable(value="userId") String userId,@PathVariable(value="taskId") String taskId) {
+		return service.removeTaskForUserById(taskId, userId);
+	}
+	
+	@PutMapping("/user/{userId}/tasks/{taskId}")
+	public User updateTaskForUser(@PathVariable(value="userId") String userId,@PathVariable(value="taskId") String taskId, @RequestBody Task task) {
+		task.setId(taskId);
+		return service.addTaskToUser(task, userId);
 	}
 	
 }

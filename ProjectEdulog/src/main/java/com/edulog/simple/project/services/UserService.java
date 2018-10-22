@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.edulog.simple.project.dao.collections.Task;
 import com.edulog.simple.project.dao.collections.User;
-import com.edulog.simple.project.dao.queries.TaskRepository;
 import com.edulog.simple.project.dao.queries.UserRepository;
 import com.edulog.simple.project.exceptions.UserNotFoundException;
 
@@ -22,7 +22,7 @@ public class UserService {
 	private UserRepository repo;
 	
 	@Autowired
-	private TaskRepository taskRepo;
+	private TaskService taskService;
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -36,7 +36,7 @@ public class UserService {
 	}
 	
 	public User newUser(User user) {
-		user.getTasks().forEach(t -> taskRepo.save(t));
+		user.getTasks().forEach(t -> taskService.newTask(t));
 		return repo.save(user);
 	}
 	
@@ -63,4 +63,46 @@ public class UserService {
 		mongoTemplate.updateMulti(query, update, User.class);
 	}
 
+	/**
+	 * 
+	 * remove the current task on the selected user</br>
+	 * @param task
+	 */
+	public User removeTaskForUser(Task task, String userId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(userId));
+		Update update = new Update();
+		update.pull("tasks", task);
+		mongoTemplate.updateMulti(query, update, User.class);
+		return getUser(userId);
+	}
+	
+	 /** 
+	 * remove the current task on the selected user</br>
+	 * @param task
+	 */
+	public User removeTaskForUserById(String taskId, String userId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(userId));
+		Update update = new Update();
+		update.pull("tasks", Query.query(Criteria.where("tasks.is").is(taskId)));
+		mongoTemplate.updateMulti(query, update, User.class);
+		return getUser(userId);
+	}
+	
+	/**
+	 * 
+	 * add the current task on the selected user</br>
+	 * @param task
+	 */
+	public User addTaskToUser(Task task, String userId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(userId));
+		Update update = new Update();
+		// I supose that we don't want two same task in the task list
+		update.addToSet("tasks", task);
+		mongoTemplate.updateMulti(query, update, User.class);
+		taskService.newTask(task);
+		return getUser(userId);
+	}
 }

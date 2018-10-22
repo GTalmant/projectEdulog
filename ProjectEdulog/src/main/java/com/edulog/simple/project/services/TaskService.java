@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edulog.simple.project.dao.collections.Task;
-import com.edulog.simple.project.dao.collections.User;
 import com.edulog.simple.project.dao.queries.TaskRepository;
 import com.edulog.simple.project.exceptions.TaskNotFoundException;
 
@@ -29,7 +28,7 @@ public class TaskService {
 	}
 	
 	public Task newTask(Task task) {
-		return repo.insert(task);
+		return repo.save(task);
 	}
 	
 	public Task delete(Task task) {
