@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.edulog.simple.project.dao.collections.Task;
 import com.edulog.simple.project.dao.collections.User;
 import com.edulog.simple.project.services.UserService;
 
@@ -147,5 +151,100 @@ private MockMvc mockMvc;
 				.content(user.toJson()))
 		.andDo(print())
 		.andExpect(status().is(Status.BAD_REQUEST.getStatusCode()));
+	}
+	
+	@Test
+	public void testPostOkWithTask() throws Exception {
+		Task task = new Task("goodSize", "this description as a good size");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testPostWithTaskToShort() throws Exception {
+		Task task = new Task("short", "short");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().is(Status.BAD_REQUEST.getStatusCode()));
+	}
+	
+	@Test
+	public void testPostWithTaskToLong() throws Exception {
+		Task task = new Task("toLong", "Unfortunatly, this is a too long description to be accepted by the service, it is too bad, but it is the law");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().is(Status.BAD_REQUEST.getStatusCode()));
+	}
+	
+	@Test
+	public void testPutOkWithTask() throws Exception {
+		Task task = new Task("goodSize", "this description as a good size");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(put("/user/good")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testPutWithTaskToShort() throws Exception {
+		Task task = new Task("short", "short");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(put("/user/good")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().is(Status.BAD_REQUEST.getStatusCode()));
+	}
+	
+	@Test
+	public void testPutWithTaskToLong() throws Exception {
+		Task task = new Task("toLong", "Unfortunatly, this is a too long description to be accepted by the service, it is too bad, but it is the law");
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		User user = new User("good", "goodFirstName", "goodLastName", tasks);
+		mockMvc.perform(put("/user/good")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().is(Status.BAD_REQUEST.getStatusCode()));
+	}
+	
+	@Test
+	public void testComplex() throws Exception {
+		User user = new User("good", "goodFirstName", "goodLastName");
+		mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(user.toJson()))
+		.andDo(print())
+		.andExpect(status().isOk());
+		mockMvc.perform(get("/user/good"))
+		.andDo(print())
+		.andExpect(status().isOk()).andReturn();
+		mockMvc.perform(get("/user"))
+		.andDo(print())
+		.andExpect(status().isOk()).andReturn();
+		
 	}
 }
