@@ -1,15 +1,17 @@
 package com.edulog.simple.project.dao.collections;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.Id;
-import org.springframework.lang.NonNull;
 
 public class Task {
 	
 	@Id
-	@NonNull
 	private String id;
 	
-	@NonNull
+	@NotNull
+	@Size(min = 10, max= 150, message="description size must be between 10 and 150 characters")
 	private String description;
 
 	public Task(String id, String description) {
@@ -39,3 +41,5 @@ public class Task {
 				id, description);
 	}
 }
+
+

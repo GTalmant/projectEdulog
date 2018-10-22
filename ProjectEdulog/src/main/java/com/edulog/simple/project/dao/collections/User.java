@@ -3,27 +3,30 @@ package com.edulog.simple.project.dao.collections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.Id;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 public class User {
 	
 	@Id
-	@NonNull
+	@NotNull
 	private String id;
 
-	@NonNull
+	@NotNull
+	@Size(min = 2, max= 20, message="firstName size must be between 2 and 20 characters")
 	private String firstName;
 	
-	@NonNull
+	@NotNull
+	@Size(min = 2, max= 20, message="lastName size must be between 2 and 20 characters")
 	private String lastName;
 	
 	@Nullable
-	private List<Task> tasks;
+	private List<Task> tasks; //haven't find a way to check the data inside this List
 	
 	public User() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public User(String id, String firstName, String lastName) {
