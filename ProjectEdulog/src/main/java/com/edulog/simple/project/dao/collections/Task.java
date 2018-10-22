@@ -11,7 +11,7 @@ public class Task {
 	private String id;
 	
 	@NotNull
-	@Size(min = 10, max= 150, message="description size must be between 10 and 150 characters")
+	@Size(min = 10, max= 100, message="description size must be between 10 and 150 characters")
 	private String description;
 
 	public Task(String id, String description) {
@@ -39,6 +39,16 @@ public class Task {
 	public String toString() {
 		return String.format("Task[id=%s, description=%s]",
 				id, description);
+	}
+	
+	/**
+	 * a litle help for JUnit test
+	 * @return
+	 */
+	public String toJson() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"id\":\"").append(id).append("\", \"description\":\"").append(description).append("\"}");
+		return builder.toString();
 	}
 }
 

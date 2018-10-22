@@ -3,6 +3,7 @@ package com.edulog.simple.project.dao.collections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -24,6 +25,7 @@ public class User {
 	private String lastName;
 	
 	@Nullable
+	@Valid
 	private List<Task> tasks; //haven't find a way to check the data inside this List
 	
 	public User() {
@@ -76,5 +78,27 @@ public class User {
 	public String toString() {
 		return String.format("User[id=%s, firstName=%s, lastName=%s, task=%s]",
 				id, firstName, lastName, tasks.toString());
+	}
+	
+	/**
+	 * a litle help for JUnit test
+	 * @return
+	 */
+	public String toJson() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"id\":\"").append(id)
+		.append("\", \"firstName\":\"").append(firstName)
+		.append("\", \"lastName\":\"").append(lastName).append("\"");
+		if(!tasks.isEmpty()) {
+			builder.append(", \"tasks\": [");
+			int size = tasks.size();
+			for (int i = 0; i < size; i++) {
+				builder.append(tasks.get(i).toJson());
+				if (i < size - 1) builder.append(", ");
+			}
+			builder.append("]");
+		}
+		builder.append("}");
+		return builder.toString();
 	}
 }
