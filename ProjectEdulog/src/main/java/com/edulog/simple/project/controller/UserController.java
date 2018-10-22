@@ -61,6 +61,11 @@ public class UserController {
 		return service.delete(user);
 	}
 	
+	@GetMapping("/user/{id}/tasks")
+	public List<Task> getAllTaskForUser(@PathVariable(value="id") String id) {
+		return service.getUser(id).getTasks();
+	}
+	
 	@PostMapping("/user/{id}/tasks")
 	public User addTaskToUser(@PathVariable(value="id") String id, @Valid @RequestBody Task task, BindingResult bindingResult) {
 		handleBindingResult(bindingResult);
